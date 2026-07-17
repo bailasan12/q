@@ -1602,3 +1602,228 @@ footer {
 .delete-image-btn i {
     font-size: 15px;
 }
+
+/* شبكة المنتجات */
+.products-container,
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+
+/* كرت المنتج */
+.product-card {
+    width: 100%;
+    max-width: 300px;
+    margin: auto;
+    overflow: hidden;
+    border-radius: 15px;
+    box-sizing: border-box;
+}
+
+
+/* الصور داخل الكرت */
+.product-card img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+
+/* النصوص */
+.product-card h3,
+.product-card p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+
+/* الأزرار */
+.product-card button,
+.product-card a {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* للجوال */
+@media (max-width: 600px) {
+
+    .products-container,
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .product-card {
+        border-radius: 10px;
+    }
+
+    .product-card h3 {
+        font-size: 14px;
+    }
+
+    .product-card p {
+        font-size: 13px;
+    }
+
+}
+
+
+/* للشاشات الصغيرة جدًا */
+@media (max-width: 380px) {
+
+    .products-container,
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+/* حاوية المنتج نفسه */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%; /* لتوحيد ارتفاع كل الكروت في الصف */
+}
+
+/* حاوية الصورة */
+.product-image-wrapper {
+    height: 200px; /* حدد ارتفاع ثابت يناسب تصميمك */
+    overflow: hidden;
+}
+
+.product-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* لضمان عدم تشوه الصورة */
+}
+.product-card img {
+    width: 100%;
+    height: 220px; /* أو أي ارتفاع تراه مناسباً */
+    object-fit: cover; /* يقص الصورة لتملأ المساحة بدون أن تتمدد بشكل مشوه */
+}
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    align-items: stretch;
+}
+/* حاوية الشبكة التي تجمع كل المنتجات داخل القسم */
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    align-items: stretch; /* تجعل الكروت كلها بنفس الارتفاع في نفس الصف تلقائياً */
+}
+
+/* كرت المنتج نفسه */
+.products .product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* تأخذ الارتفاع الكامل المتاح */
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+/* الحاوية الخاصة بالصورة لتوحيد الارتفاع */
+.products .product-card img,
+.products .product-card .flipbook,
+.products .product-card .front {
+    width: 100%;
+    height: 220px; /* الارتفاع الثابت للصور */
+    object-fit: cover; /* يقص الصورة لتملأ المساحة بدون تشويه */
+    border-radius: 4px;
+}
+
+/* العناوين والأسعار والمحتوى النصي */
+.products .product-card h2,
+.products .product-card h3 {
+    font-size: 1.1rem;
+    margin: 12px 0 6px 0;
+}
+
+.products .product-card .price {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* حاوية الأزرار في الأسفل (مثل عرض التفاصيل وأضف إلى السلة) */
+.products .product-card .actions,
+.products .product-card .quantity {
+    margin-top: auto; /* السطر السحري: يدفع الأزرار إلى قاع الكرت تماماً */
+    display: flex;
+    gap: 10px;
+}
+
+.products .product-card .btn {
+    flex: 1; /* تجعل الأزرار تتقاسم المساحة الأفقية بالتساوي */
+    text-align: center;
+    padding: 8px;
+}
+/* حاوية المنتجات الرئيسية */
+.products {
+    display: flex;       /* ترتيب العناصر أفقياً بجانب بعضها */
+    flex-wrap: wrap;     /* السطر السحري: إذا لم تتسع الشاشة للعناصر، تنزل تلقائياً لسطر جديد */
+    justify-content: center; /* تملأ الفراغات وتجعل المنتجات موسطة في الشاشة بشكل متناسق */
+    gap: 20px;           /* مسافة ثابتة (20 بكسل) بين كل منتج وآخر من جميع الجهات */
+    padding: 15px;       /* مسافة أمان صغيرة وثابتة تمنع المنتجات من الالتصاق بأطراف الشاشة */
+    width: 100%;         /* لتأخذ الحاوية العرض الكامل المتاح لها */
+    box-sizing: border-box;
+}
+
+/* تنسيق كرت المنتج نفسه لضمان مرونته */
+.product-card {
+    flex: 1 1 240px;    /* ينمو وينكمش بمرونة، ولكن بحد أدنى لعرض الكرت 240 بكسل */
+    max-width: 300px;   /* يمنع الكرت من التمدد بشكل ضخم جداً على الشاشات الكبيرة */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+main {
+    padding: 20px 15px; /* مسافة أمان صغيرة جداً (15 بكسل) من أطراف الشاشة يميناً ويساراً */
+    max-width: 100%;    /* يتيح للمحتوى استخدام كامل عرض الشاشة المتاح */
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+/* حاوية الأقسام والمنتجات الرئيسية في الصفحة الرئيسية والأقسام */
+.products {
+    display: grid;
+    /* السطر التالي يضمن اصطفافها أفقياً وتلقائياً حسب مساحة الشاشة */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;           /* مسافة مناسبة بين الكروت */
+    padding: 20px 15px;  /* مسافة أمان صغيرة لمنع الالتصاق بأطراف الشاشة يميناً ويساراً */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* تنسيق كرت المنتج أو القسم نفسه */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    box-sizing: border-box;
+    height: 100%; /* لتوحيد الارتفاع */
+}
+main {
+    padding: 10px 0;
+    max-width: 100%; /* يضمن عدم انضغاط المحتوى في المنتصف */
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
