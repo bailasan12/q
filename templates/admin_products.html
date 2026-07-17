@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}إدارة المنتجات{% endblock %}
+
+{% block content %}
+<div class="admin-shell">
+
+  <div class="admin-topbar">
+    <div>
+      <h1>المنتجات</h1>
+      <p>أضف منتجات جديدة مع صور ووصف</p>
+    </div>
+
+    <a href="{{ url_for('admin_dashboard') }}" class="btn secondary">
+      العودة للوحة التحكم
+    </a>
+  </div>
+
+
+  <div class="admin-grid">
+
+
+    <!-- إضافة منتج -->
+    <div class="admin-card">
+
+      <h2>إضافة منتج جديد</h2>
+
+      <form method="post" enctype="multipart/form-data" class="admin-form">
+
+        <label>اسم المنتج</label>
+        <input type="text" name="name" required>
+
+
+        <label>السعر</label>
+        <input type="number" step="0.01" name="price" required>
+
+
+        <label>السعر قبل الخصم</label>
+        <input type="number" step="0.01" name="original_price">
+
+
+        <label>الوصف</label>
+        <textarea name="description"></textarea>
+
+
+        <label>الألوان:</label>
+        <textarea name="colors" rows="4"
+        placeholder="مثال:
+أحمر,#ff0000
+أزرق,#0000ff"></textarea>
+
+
+        <label>
+          <input type="checkbox" name="requires_attachment">
+          الزبون يرفق صورة
+        </label>
+
+
+        <label>القسم</label>
+
+        <select name="category">
+
+          <option value="section1">قسم رمضانيات</option>
+          <option value="section2">قسم مفكرات تنظيمية</option>
+          <option value="section3">قسم دفاتر </option>
+          <option value="section4">قسم أقلام وهايلايتر</option>
+          <option value="section5">قسم هدايا تحفيزية</option>
+          <option value="section6">قسم أدوات مكتبية </option>
+          <option value="section7">قسم الاوت ليت </option>
+          <option value="section8">قسم بكج المعلم </option>
+
+        </select>
+
+
+        <label>الصور</label>
+        <input type="file" name="images" multiple>
+
+
+        <button type="submit" class="btn buy">
+          حفظ المنتج
+        </button>
+
+
+      </form>
+
+    </div>
+
+
+
+
+    <!-- قائمة المنتجات -->
+
+    <div class="admin-card">
+
+      <h2>المنتجات الحالية</h2>
+
+
+      <div class="product-list">
+
+
+        {% for product in products %}
+
+
+        <div class="product-item">
+
+
+          <div class="product-info">
+
+            <strong>
+              {{ product['name'] }}
+            </strong>
+
+            <br>
+
+            <span>
+              {{ product['price'] }} ₪
+            </span>
+
+
+            <!-- حذف المنتج -->
+
+            <form 
+            action="{{ url_for('delete_product', product_id=product['product_id']) }}"
+            method="POST"
+            onsubmit="return confirm('هل تريد حذف هذا المنتج؟');">
+
+
+              <button type="submit" class="delete-btn">
+                🗑 حذف المنتج
+              </button>
+
+
+            </form>
+
+
+          </div>
+
+
+
+
+          <div class="product-actions">
+
+
+            <a href="{{ url_for('edit_product', product_id=product['product_id']) }}"
+               class="btn">
+
+              تعديل
+
+            </a>
+
+
+          </div>
+
+
+
+        </div>
+
+
+        {% else %}
+
+        <p>
+          لا توجد منتجات حالياً.
+        </p>
+
+
+        {% endfor %}
+
+
+
+      </div>
+
+
+    </div>
+
+
+
+  </div>
+
+
+</div>
+{% endblock %}

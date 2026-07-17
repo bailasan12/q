@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block body_class %}details-page{% endblock %}
+
+{% block title %}تفاصيل المنتج{% endblock %}
+
+{% block content %}
+<div class="details">
+	<div class="details-gallery">
+		{% if product.images %}
+		<div class="main-image">
+			<img id="main-product-image" src="{{ url_for('static', filename='images/' + product.images[0]) }}" alt="{{ product.name }}">
+		</div>
+		<div class="thumbs">
+			{% for img in product.images %}
+			<img class="thumb" src="{{ url_for('static', filename='images/' + img) }}" data-src="{{ url_for('static', filename='images/' + img) }}" alt="{{ product.name }}">
+			{% endfor %}
+		</div>
+		{% endif %}
+	</div>
+
+	<div class="details-info">
+		<h1>{{ product.name }}</h1>
+		<p class="price">السعر: {{ product.price }}</p>
+		<p class="description">{{ product.description or 'لا يوجد وصف متوفر لهذا المنتج حالياً.' }}</p>
+
+{% if product.colors %}
+<div class="product-colors">
+	{% if need_color %}
+	<div class="color-warning">من فضلك اختر اللون أولاً قبل الانتقال إلى السلة.</div>
+	{% endif %}
+    <p class="colors-title">اختر اللون أولاً</p>
+	<div class="colors-list">
+		{% for color in product.colors %}
+		<span class="color-circle"
+			  data-color="{{ color.name }}"
+			  data-code="{{ color.code }}"
+			  style="background-color: {{ color.code }};"
+			  title="{{ color.name }} ({{ color.code }})">
+		</span>
+		{% endfor %}
+	</div>
+    <p class="color-help">اضغط على اللون المطلوب قبل الضغط على شراء الآن.</p>
+</div>
+{% endif %}
+
+{% if attachment_error %}
+<div class="attachment-error">{{ attachment_error }}</div>
+{% endif %}
+
+
+		<div class="details-actions">
+			<div class="multi-select-summary" aria-live="polite">
+				<span id="selected-count">عدد العناصر: 0</span>
+				<span id="selected-total" style="margin-inline-start:12px;">السعر الإجمالي: {{ product.price }} شيكل</span>
+			</div>
+			<form id="add-to-cart-form" method="post" enctype="multipart/form-data" action="{{ url_for('add_to_cart', product_id=product.id) }}">
+{% if product.requires_attachment %}
+<div class="form-group attachment-upload">
+    <label for="attachment">أرفق صورة</label>
+
+    <div class="custom-file-input">
+        <button type="button" class="file-select-btn" onclick="document.getElementById('attachment').click();">
+            اختر صورة
+        </button>
+
+        <span class="file-name" id="selected-file-name">
+            لم يتم اختيار ملف
+        </span>
+    </div>
+
+    <input 
+        type="file" 
+        id="attachment" 
+        name="attachment" 
+        accept="image/*" 
+        required
+    >
+</div>
+{% endif %}
+				<input type="hidden" id="selected-colors" name="colors" value="">
+				<button type="submit" class="btn buy">شراء الآن</button>
+			</form>
+	</div>
+	</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	const colorOptions = document.querySelectorAll('.product-colors .color-circle');
+	const selectedCountEl = document.getElementById('selected-count');
+	const selectedTotalEl = document.getElementById('selected-total');
+	const addToCartForm = document.getElementById('add-to-cart-form');
+	const selectedColorsInput = document.getElementById('selected-colors');
+	const attachmentInput = document.getElementById('attachment');
+	const selectedFileName = document.getElementById('selected-file-name');
+	const basePrice = {{ product.price }};
+	const selectedColors = new Set();
+
+	if (attachmentInput && selectedFileName) {
+		attachmentInput.addEventListener('change', function() {
+			const file = attachmentInput.files[0];
+			selectedFileName.textContent = file ? file.name : 'لم يتم اختيار ملف';
+		});
+	}
+
+	function updateSummary() {
+		selectedCountEl.textContent = 'عدد العناصر: ' + selectedColors.size;
+		const total = basePrice * selectedColors.size;
+		selectedTotalEl.textContent = 'السعر الإجمالي: ' + total + ' شيكل';
+	}
+
+	colorOptions.forEach(option => {
+		option.addEventListener('click', function() {
+			const col = this.dataset.color;
+			if (selectedColors.has(col)) {
+				selectedColors.delete(col);
+				this.classList.remove('selected');
+			} else {
+				selectedColors.add(col);
+				this.classList.add('selected');
+			}
+			updateSummary();
+		});
+	});
+
+	if (addToCartForm) {
+		addToCartForm.addEventListener('submit', function(event) {
+			if (colorOptions.length > 0 && selectedColors.size === 0) {
+				event.preventDefault();
+				alert('من فضلك اختر لون واحد على الأقل قبل الإضافة.');
+				return;
+			}
+			if (selectedColorsInput) {
+				selectedColorsInput.value = Array.from(selectedColors).join(',');
+			}
+		});
+	}
+});
+</script>
+{% endblock %}

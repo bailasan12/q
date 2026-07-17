@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}إدارة الطلبات{% endblock %}
+
+{% block content %}
+<div class="admin-shell">
+  <div class="admin-topbar">
+    <div>
+      <h1>الطلبات</h1>
+      <p>تابع حالة الطلبات وتحديثها</p>
+    </div>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn secondary">العودة للوحة التحكم</a>
+  </div>
+
+  <div class="admin-panel">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>الطلب</th>
+            <th>العميل</th>
+            <th>الإجمالي</th>
+            <th>المنطقة</th>
+            <th>الحالة</th>
+            <th>تحديث</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+
+            <td>
+{% for item in order['items'] %}
+<div class="product-card-mini">
+
+    <img src="{{ url_for('static', filename='images/' + item.image) }}"
+         alt="{{ item.name }}"
+         class="product-thumb">
+
+{% if item.get('attachment') %}
+<p>الصورة المرفقة من العميل:</p>
+<img src="{{ url_for('static', filename='uploads/' + item.get('attachment')) }}"
+     alt="صورة العميل"
+     class="product-thumb">
+{% endif %}
+
+    <div class="product-info">
+        <h4>{{ item.name }}</h4>
+
+        <p>
+            الكمية: {{ item.quantity }}
+        </p>
+
+        <p>
+            السعر: {{ item.subtotal }} ₪
+        </p>
+
+{% if item.colors %}
+<div class="order-colors">
+    {% for color in item.colors %}
+        {% if color.code %}
+        <div class="order-color-item">
+            <span class="order-color-circle"
+                  style="background-color: {{ color.code }}"></span>
+            <span class="order-color-qty">
+                ×{{ color.quantity }}
+            </span>
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+    </div>
+
+</div>
+{% endfor %}
+</td>
+
+       <td>{{ order.customer_name }}<br>{{ order.customer_phone }}</td>
+            <td>{{ order.final_total }} ₪</td>
+            <td>{{ order.delivery_region }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+              <form method="post" class="inline-form">
+                <input type="hidden" name="order_id" value="{{ order.order_id }}">
+                <select name="status">
+                  <option value="new" {% if order.status == 'new' %}selected{% endif %}>جديد</option>
+                  <option value="processing" {% if order.status == 'processing' %}selected{% endif %}>قيد المعالجة</option>
+                  <option value="done" {% if order.status == 'done' %}selected{% endif %}>تم التسليم</option>
+                </select>
+                <button type="submit" class="btn buy">حفظ</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block body_class %}cart-page{% endblock %}
+
+{% block title %}سلة المشتريات{% endblock %}
+
+{% block content %}
+<div class="cart">
+
+  <h1 class="cart-title">
+    <i class="fa-solid fa-cart-shopping"></i>
+    سلة المشتريات
+  </h1>
+
+  {% if cart_items %}
+    <div class="products vertical">
+      {% for item in cart_items %}
+      <div class="product-card">
+
+        <div class="flipbook single">
+          <div class="page front">
+            <img src="{{ url_for('static', filename='images/' + item.image) }}" alt="{{ item.name }}">
+          </div>
+        </div>
+
+        <h2>{{ item.name }}</h2>
+        <p class="price">
+          السعر الأصلي: {{ item.price }} شيكل
+          {% if item.quantity > 1 %}
+            &nbsp;× {{ item.quantity }} = <strong>{{ item.subtotal }} شيكل</strong>
+          {% endif %}
+        </p>
+
+        {% if item.colors %}
+        <div class="cart-colors">
+          {% for c in item.colors %}
+          <a href="{{ url_for('remove_from_cart', product_id=item.id, color=c.name) }}" class="color-pill" title="{{ c.name }}">
+            <span class="color-label">
+              <span class="color-dot" style="background-color: {{ c.code or '#ccc' }}"></span>
+              <span class="color-name">{{ c.name }}</span>
+            </span>
+            <span class="color-qty">x{{ c.quantity }}</span>
+          </a>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="quantity">
+          <a href="{{ url_for('decrease_total', product_id=item.id) }}">
+            <i class="fa-solid fa-minus"></i>
+          </a>
+
+          <span>{{ item.quantity }}</span>
+
+          <a href="{{ url_for('increase_total', product_id=item.id) }}">
+            <i class="fa-solid fa-plus"></i>
+          </a>
+        </div>
+
+        <div class="actions">
+          <a href="{{ url_for('details', product_id=item.id) }}" class="btn">عرض التفاصيل</a>
+          <a href="{{ url_for('remove_from_cart', product_id=item.id) }}" class="btn">حذف</a>
+        </div>
+
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="cart-summary">
+      <p>عدد المنتجات: {{ cart_items|length }}</p>
+      <p class="summary-total">المجموع الكلي: {{ total }} شيكل</p>
+      <div class="cart-actions">
+        <a href="{{ url_for('checkout') }}" class="btn buy">إتمام الطلب</a>
+        <a href="/" class="btn secondary">العودة للتسوق</a>
+      </div>
+    </div>
+
+  {% else %}
+    <p class="empty-cart">
+      <i class="fa-solid fa-cart-arrow-down"></i>
+      سلة المشتريات فارغة
+    </p>
+  {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}تسجيل الدخول للوحة الإدارة{% endblock %}
+
+{% block content %}
+<div class="admin-shell">
+  <div class="admin-card">
+    <div class="admin-card__head">
+      <h1>لوحة تحكم المتجر</h1>
+      <p>سجل الدخول لإدارة الطلبات والمنتجات</p>
+    </div>
+    {% if message %}
+      <div class="alert">{{ message }}</div>
+    {% endif %}
+    <form method="post" action="{{ url_for('admin_login') }}" class="admin-form">
+      <label>اسم المستخدم</label>
+      <input type="text" name="username" required>
+      <label>كلمة المرور</label>
+      <input type="password" name="password" required>
+      <button type="submit" class="btn buy">دخول</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

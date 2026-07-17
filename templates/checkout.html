@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+
+{% block title %}إتمام الشراء{% endblock %}
+
+{% block content %}
+
+<div class="checkout-page">
+
+  <h1 class="title">إتمام الشراء</h1>
+
+  {% if cart_items %}
+
+  <div class="checkout-grid">
+
+    <div class="checkout-list">
+
+      {% for item in cart_items %}
+
+      <div class="checkout-item">
+
+        <div class="checkout-thumb">
+          <img src="{{ url_for('static', filename='images/' + item.image) }}" 
+               alt="{{ item.name }}">
+        </div>
+
+
+        <div class="checkout-details">
+
+          <h3>{{ item.name }}</h3>
+
+
+          {% if item.colors %}
+          <div class="cart-colors">
+
+            {% for c in item.colors %}
+
+            <div class="color-pill">
+
+              <span class="color-dot"
+                    style="background-color: {{ c.code or '#ccc' }}">
+              </span>
+
+              <span class="color-name">
+                {{ c.name }}
+              </span>
+
+              <span class="color-qty">
+                x{{ c.quantity }}
+              </span>
+
+            </div>
+
+            {% endfor %}
+
+          </div>
+          {% endif %}
+
+
+          <p>الكمية: {{ item.quantity }}</p>
+
+          <p>السعر لكل قطعة: {{ item.price }} شيكل</p>
+
+          <p>المجموع: {{ item.subtotal }} شيكل</p>
+
+
+          {% if item.requires_attachment %}
+
+          <div class="attachment-box">
+
+              <label>
+                إرفاق صورة للمنتج
+              </label>
+
+              <input type="file"
+                     name="attachment_{{ item.product_id }}"
+                     accept="image/*"
+                     required>
+
+          </div>
+
+          {% endif %}
+
+
+        </div>
+
+      </div>
+
+
+      {% endfor %}
+
+
+    </div>
+
+
+
+    <div class="checkout-summary">
+
+      <h2>ملخص الطلب</h2>
+
+
+      <p>
+        عدد المنتجات:
+        {{ cart_items|length }}
+      </p>
+
+
+      <div class="summary-breakdown">
+
+
+        <p class="summary-subtotal">
+          مجموع المنتجات:
+          <span id="subtotal">
+            {{ total }}
+          </span>
+          شيكل
+        </p>
+
+
+        <p class="summary-shipping">
+          رسوم التوصيل:
+          <span id="shipping">
+            0
+          </span>
+          شيكل
+        </p>
+
+
+        <p class="summary-total">
+          المجموع الكلي:
+          <span id="total-amount">
+            {{ total }}
+          </span>
+          شيكل
+        </p>
+
+
+      </div>
+
+
+
+      <form method="post" 
+            enctype="multipart/form-data"
+            class="checkout-form">
+
+
+        <div class="form-group">
+
+          <label for="customer_name">
+            الاسم الكامل
+          </label>
+
+          <input type="text"
+                 id="customer_name"
+                 name="customer_name"
+                 required
+                 placeholder="مثال: أحمد محمد">
+
+        </div>
+
+
+
+        <div class="form-group">
+
+          <label for="customer_phone">
+            رقم الجوال
+          </label>
+
+          <input type="tel"
+                 id="customer_phone"
+                 name="customer_phone"
+                 required
+                 placeholder="مثال: 0591234567">
+
+        </div>
+
+
+
+        <div class="form-group">
+
+          <label for="customer_address">
+            العنوان
+          </label>
+
+          <textarea id="customer_address"
+                    name="customer_address"
+                    rows="4"
+                    required
+                    placeholder="المدينة، الشارع، رقم المنزل"></textarea>
+
+        </div>
+
+
+
+        <div class="form-group">
+
+          <label for="delivery_region">
+            منطقة التوصيل
+          </label>
+
+
+          <select id="delivery_region"
+                  name="delivery_region"
+                  required
+                  onchange="updateShippingFee()">
+
+
+            <option value="">
+              اختر المنطقة
+            </option>
+
+            <option value="west_bank">
+              الضفة الغربية
+            </option>
+
+            <option value="inside_palestine">
+              الداخل الفلسطيني
+            </option>
+
+            <option value="jerusalem">
+              القدس
+            </option>
+
+
+          </select>
+
+        </div>
+
+
+
+
+        <div class="form-group">
+
+          <label for="payment_method">
+            طريقة الدفع
+          </label>
+
+
+          <select id="payment_method"
+                  name="payment_method"
+                  required>
+
+
+            <option value="">
+              اختر طريقة الدفع
+            </option>
+
+
+            <option value="cod">
+              الدفع عند الاستلام
+            </option>
+
+
+            <option value="online">
+              الدفع الإلكتروني
+            </option>
+
+
+            <option value="bank_transfer">
+              تحويل بنكي
+            </option>
+
+
+          </select>
+
+
+        </div>
+
+
+
+
+        <div class="form-group">
+
+          <label for="order_notes">
+            الملاحظات
+          </label>
+
+
+          <textarea id="order_notes"
+                    name="order_notes"
+                    rows="3"
+                    placeholder="أضف ملاحظات عن الطلب أو التوصيل"></textarea>
+
+
+        </div>
+
+
+
+        <button type="submit" class="btn buy">
+          تأكيد الطلب
+        </button>
+
+
+      </form>
+
+
+
+      <a href="{{ url_for('cart') }}" 
+         class="btn secondary">
+        العودة للسلة
+      </a>
+
+
+    </div>
+
+
+  </div>
+
+
+
+  {% else %}
+
+
+  <div class="empty-cart">
+
+    <p>
+      لا توجد منتجات في السلة حالياً.
+    </p>
+
+
+    <a href="/" class="btn">
+      العودة للمتجر
+    </a>
+
+
+  </div>
+
+
+  {% endif %}
+
+
+</div>
+
+
+
+<script>
+
+const shippingFees = {
+
+  'west_bank': 25,
+
+  'jerusalem': 35,
+
+  'inside_palestine': 80
+
+};
+
+
+const subtotal = {{ total }};
+
+
+
+function updateShippingFee(){
+
+  const region =
+    document.getElementById('delivery_region').value;
+
+
+  const shippingFee =
+    shippingFees[region] || 0;
+
+
+  const totalAmount =
+    subtotal + shippingFee;
+
+
+
+  document.getElementById('shipping').textContent =
+    shippingFee;
+
+
+  document.getElementById('total-amount').textContent =
+    totalAmount;
+
+}
+
+</script>
+
+
+{% endblock %}

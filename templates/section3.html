@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}دفاتر{% endblock %}
+
+{% block extra_js %}
+<script>
+$(function() {
+    // Flipbook multi-page behavior
+    document.querySelectorAll('.flipbook').forEach(function(fb) {
+        const pages = Array.from(fb.querySelectorAll('.page'));
+        // set z-index order using CSS variable --idx for each page
+        pages.forEach((p, i) => p.style.setProperty('--idx', i));
+
+        let current = 0; // number of flipped pages
+
+        function flipNext() {
+            const next = pages[current];
+            if (!next) return;
+            next.classList.add('flipped');
+            current++;
+        }
+
+        function flipPrev() {
+            if (current <= 0) return;
+            current--;
+            const p = pages[current];
+            if (p) p.classList.remove('flipped');
+        }
+
+        // click advances one page
+        fb.addEventListener('click', function(e) {
+            // if clicked on a control, ignore
+            flipNext();
+        });
+
+        // keyboard: Enter/Space -> next, Backspace -> previous
+        fb.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                flipNext();
+            } else if (e.key === 'Backspace' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                flipPrev();
+            }
+        });
+
+        // Allow double-click to reset
+        fb.addEventListener('dblclick', function() {
+            // reset all
+            pages.forEach(p => p.classList.remove('flipped'));
+            current = 0;
+        });
+    });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<h1 class="title">دفاتر </h1>
+
+<div class="products">
+    {% for product in products %}
+    <div class="product-card">
+        {# Flipbook: يمثل كل صورة صفحة في الكتاب، يدعم أي عدد من الصور #}
+        <div class="flipbook booklet" tabindex="0" role="button" aria-label="كتاب صور المنتج">
+            <div class="flipbook-inner">
+                {% for img in product.images %}
+                <div class="page" data-index="{{ loop.index0 }}">
+                    <img src="{{ url_for('static', filename='images/' + img) }}" alt="{{ product.name }}">
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <h2>{{ product.name }}</h2>
+<p class="price">
+    {% if product.original_price %}
+        <span class="original-price">{{ product.original_price }} ₪</span>
+        <span class="discount-price">{{ product.price }} ₪</span>
+    {% else %}
+        <span class="normal-price">{{ product.price }} ₪</span>
+    {% endif %}
+</p>
+
+
+        <div class="actions">
+            <a href="{{ url_for('toggle_favorite', product_id=product.id) }}" class="btn fav">
+                <i class="{% if product.id in favorites %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i>
+            </a>
+            <a href="{{ url_for('details', product_id=product.id) }}" class="btn">عرض التفاصيل</a>
+            <a href="{{ url_for('add_to_cart', product_id=product.id) }}" class="btn buy">
+    <i class="fa-solid fa-cart-plus"></i>
+    أضف إلى السلة
+</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

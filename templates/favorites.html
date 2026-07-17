@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}المفضلات{% endblock %}
+
+{% block content %}
+<h1 class="title">⭐ المفضلات</h1>
+
+<div class="products vertical">
+    {% if products %}
+        {% for product in products %}
+        <div class="product-card">
+            <div class="flipbook single">
+                <div class="page front">
+                    <img src="{{ url_for('static', filename='images/' + product.images[0]) }}" alt="{{ product.name }}">
+                </div>
+            </div>
+
+            <h2>{{ product.name }}</h2>
+            <p class="price">{{ product.price }}</p>
+
+            <div class="actions">
+                <a href="{{ url_for('toggle_favorite', product_id=product.id) }}" class="btn fav">
+                    <i class="fa-solid fa-heart"></i>
+                </a>
+                <a href="{{ url_for('details', product_id=product.id) }}" class="btn">عرض التفاصيل</a>
+                <a href="{{ url_for('add_to_cart', product_id=product.id) }}" class="btn buy">شراء</a>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="text-align:center; padding:30px">لا توجد منتجات في المفضلة بعد.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

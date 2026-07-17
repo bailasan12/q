@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}تم الطلب{% endblock %}
+
+{% block content %}
+<div class="checkout-page">
+  <h1 class="title">شكراً لك!</h1>
+  <div class="checkout-success">
+    <p class="success-note">تم استلام طلبك بنجاح.</p>
+
+    <div class="order-card">
+      <div class="order-card__header">
+        <div>
+          <h3>بطاقة الطلب</h3>
+          <p>رقم الطلب: #{{ order_id or 'جديد' }}</p>
+        </div>
+        <span class="order-status">قيد التحضير</span>
+      </div>
+
+      <div class="order-card__body">
+        <div class="order-summary">
+          <h4>ملخص الطلب</h4>
+          <p class="summary-item">مجموع المنتجات: <strong>{{ total }} شيكل</strong></p>
+          <p class="summary-item">رسوم التوصيل: <strong>{{ shipping_fee }} شيكل</strong></p>
+          <p class="summary-total">المجموع النهائي: <strong>{{ final_total }} شيكل</strong></p>
+        </div>
+
+        <div class="customer-info">
+          <h4>بيانات العميل</h4>
+          <p><strong>الاسم:</strong> {{ customer_name }}</p>
+          <p><strong>الجوال:</strong> {{ customer_phone }}</p>
+          <p><strong>العنوان:</strong> {{ customer_address }}</p>
+          <p><strong>منطقة التوصيل:</strong>
+            {% if delivery_region == 'west_bank' %}الضفة الغربية{% elif delivery_region == 'inside_palestine' %}الداخل الفلسطيني{% elif delivery_region == 'jerusalem' %}القدس{% else %}غير محددة{% endif %}
+          </p>
+          <p><strong>طريقة الدفع:</strong>
+            {% if payment_method == 'cod' %}الدفع عند الاستلام{% elif payment_method == 'online' %}الدفع الإلكتروني{% elif payment_method == 'bank_transfer' %}تحويل بنكي{% else %}غير محددة{% endif %}
+          </p>
+          <p><strong>الملاحظات:</strong> {{ order_notes or 'لا توجد ملاحظات' }}</p>
+        </div>
+      </div>
+
+      <div class="order-items">
+        <h4>المنتجات داخل الطلب</h4>
+        {% for item in cart_items %}
+        <div class="order-item-card">
+          <img src="{{ url_for('static', filename='images/' + item.image) }}" alt="{{ item.name }}">
+          <div class="order-item-info">
+            <h5>{{ item.name }}</h5>
+            <p>الكمية: {{ item.quantity }}</p>
+            {% if item.colors %}
+            <div class="order-item-colors">
+              {% for color in item.colors %}
+              <span class="order-color-pill">
+                {% if color.code %}<i style="background: {{ color.code }}"></i>{% endif %}
+                {{ color.name or 'بدون لون' }} × {{ color.quantity }}
+              </span>
+              {% endfor %}
+            </div>
+            {% endif %}
+            <strong>{{ item.subtotal }} شيكل</strong>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <p>سنعمل على تجهيز طلبك وإرساله في أقرب وقت.</p>
+    <div class="checkout-actions">
+      <a href="/" class="btn buy">العودة للمتجر</a>
+      <a href="{{ url_for('favorites') }}" class="btn secondary">عرض المفضلة</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

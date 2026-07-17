@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block title %}الصفحة الرئيسية - قِرطاس{% endblock %}
+
+{% block content %}
+<!-- ===== Intro ===== -->
+
+<!-- عبارة ترحيبية -->
+<div class="welcome-text">
+    <h1>
+    مرحباً بكم في قِرْطاس 
+    <i class="fa-solid fa-scroll welcome-icon"></i>
+    </h1>
+    <h3> أنيسُ من رامَ النجاح
+        <i class="fa-solid fa-wand-magic-sparkles welcome-icon"></i>
+    </h3>
+</div>
+
+<!-- البانر -->
+<div class="banner">
+ 
+</div>
+
+<hr class="divider">
+
+<!-- ===== Sections ===== -->
+<section class="sections">
+    <a href="{{ url_for('section1') }}" class="section-card-link">
+        <div class="section-card">
+            <div class="thumbs">
+                <img src="{{ url_for('static', filename='images/section1.jpg') }}" alt="رمضانيات 1">
+                <img src="{{ url_for('static', filename='images/section1a.jpg') }}" alt="رمضانيات 2">
+                <img src="{{ url_for('static', filename='images/section1b.jpg') }}" alt="رمضانيات 3">
+            </div>
+            <h3>رمضانيات</h3>
+        </div>
+    </a>
+
+    <a href="{{ url_for('section2') }}" class="section-card-link">
+        <div class="section-card">
+            <div class="thumbs">
+                <img src="{{ url_for('static', filename='images/m/section2.jpg') }}" alt="دفاتر 1">
+                <img src="{{ url_for('static', filename='images/m/section2a.jpg') }}" alt="دفاتر 2">
+                <img src="{{ url_for('static', filename='images/m/section2b.jpg') }}" alt="دفاتر 3">
+            </div>
+            <h3>دفاتر ومفكرات تنظيمية</h3>
+        </div>
+    </a>
+
+    <a href="{{ url_for('section3') }}" class="section-card-link">
+        <div class="section-card">
+            <div class="thumbs">
+                <img src="{{ url_for('static', filename='images/d/section3.jpg') }}" alt="دفاتر 1">
+                <img src="{{ url_for('static', filename='images/d/section3d.jpg') }}" alt="دفاتر 2">
+                <img src="{{ url_for('static', filename='images/d/section3b.jpg') }}" alt="دفاتر 3">
+            </div>
+            <h3>دفاتر</h3>
+        </div>
+    </a>
+
+        <a href="{{ url_for('section4') }}" class="section-card-link">
+        <div class="section-card">
+            <div class="thumbs">
+                <img src="{{ url_for('static', filename='images/h/section4.jpg') }}" alt="دفاتر 1">
+                <img src="{{ url_for('static', filename='images/h/section4d.jpg') }}" alt="دفاتر 2">
+                <img src="{{ url_for('static', filename='images/h/section4e.jpg') }}" alt="دفاتر 3">
+            </div>
+            <h3>أقلام وهايلايتر</h3>
+        </div>
+    </a>
+
+        <a href="{{ url_for('section5') }}" class="section-card-link">
+        <div class="section-card">
+            <div class="thumbs">
+                <img src="{{ url_for('static', filename='images/t/section5aa.jpg') }}" alt="دفاتر 1">
+                <img src="{{ url_for('static', filename='images/t/section5a.jpg') }}" alt="دفاتر 2">
+                <img src="{{ url_for('static', filename='images/t/section5aaa.jpg') }}" alt="دفاتر 3">
+            </div>
+            <h3>هدايا تحفيزية</h3>
+        </div>
+    </a>
+
+            <a href="{{ url_for('section6') }}" class="section-card-link">
+        <div class="section-card">
+            <div class="thumbs">
+                <img src="{{ url_for('static', filename='images/mk/section6a.jpg') }}" alt="دفاتر 1">
+                <img src="{{ url_for('static', filename='images/mk/section6aa.jpg') }}" alt="دفاتر 2">
+                <img src="{{ url_for('static', filename='images/mk/section6aaa.jpg') }}" alt="دفاتر 3">
+            </div>
+            <h3>  أدوات مكتبية</h3>
+        </div>
+    </a>
+
+                <a href="{{ url_for('section7') }}" class="section-card-link">
+        <div class="section-card">
+  
+            <div class="thumbs">
+                <img src="{{ url_for('static', filename='images/a/section7a.jpg') }}" alt="دفاتر 1">
+                <img src="{{ url_for('static', filename='images/a/section7aa.jpg') }}" alt="دفاتر 2">
+                <img src="{{ url_for('static', filename='images/a/section7aaa.jpg') }}" alt="دفاتر 3">
+            </div>
+            <h3>اوت ليت</h3>
+        </div>
+    </a>
+
+                <a href="{{ url_for('section8') }}" class="section-card-link">
+        <div class="section-card">
+            <div class="thumbs">
+                <img src="{{ url_for('static', filename='images/mo/section8a.jpg') }}" alt="دفاتر 1">
+                <img src="{{ url_for('static', filename='images/mo/section8aa.jpg') }}" alt="دفاتر 2">
+                <img src="{{ url_for('static', filename='images/mo/section8aaa.jpg') }}" alt="دفاتر 3">
+            </div>
+            <h3>بكج المُعلم</h3>
+        </div>
+    </a>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const hearts = document.querySelectorAll('.favorite-icon');
+
+    hearts.forEach(heart => {
+        heart.addEventListener('click', function() {
+            heart.classList.toggle('favorited');
+        });
+    });
+});
+</script>
+
+<!-- Banner reveal + simple parallax -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const banner = document.querySelector('.banner');
+    if (!banner) return;
+
+    // IntersectionObserver to reveal banner when in view
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) banner.classList.add('in-view');
+        });
+    }, { threshold: 0.15 });
+    io.observe(banner);
+
+    // Simple parallax: move background slightly on scroll (subtle)
+    const speed = 0.15; // smaller number -> subtler effect
+    window.addEventListener('scroll', function() {
+        const rect = banner.getBoundingClientRect();
+        const offset = Math.max(0, -rect.top); // how far banner has moved up
+        // compute a small percent shift based on banner height
+        const pct = 50 + (offset / (banner.offsetHeight || 1)) * (speed * 100);
+        banner.style.backgroundPosition = `center ${pct}%`;
+    }, { passive: true });
+});
+</script>
+
+<script>
+// Reveal section cards with stagger when they enter viewport
+document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.section-card');
+    if (!cards.length) return;
+
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const el = entry.target;
+                // stagger based on data-index or position
+                const idx = Array.from(cards).indexOf(el);
+                setTimeout(() => el.classList.add('in-view'), idx * 120);
+                io.unobserve(el);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    cards.forEach(c => io.observe(c));
+});
+</script>
+
+<script>
+// On hover, cycle images inside `.thumbs` for each section-card
+document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.section-card');
+    if (!cards.length) return;
+
+    cards.forEach(card => {
+        const thumbs = card.querySelector('.thumbs');
+        if (!thumbs) return;
+        const imgs = Array.from(thumbs.querySelectorAll('img'));
+        if (!imgs.length) return;
+
+        let idx = 0;
+        let timer = null;
+
+        function applyOrder(centerIndex) {
+            imgs.forEach((img, i) => {
+                const pos = i - centerIndex; // negative -> left, positive -> right
+                const tx = pos * 12; // px shift
+                const rot = pos * -1.5; // degrees
+                const z = 100 - Math.abs(pos);
+                img.style.transform = `translateX(${tx}px) rotate(${rot}deg)`;
+                img.style.zIndex = z;
+                img.style.boxShadow = (Math.abs(pos) <= 1) ? '0 10px 22px rgba(0,0,0,0.18)' : '0 6px 18px rgba(0,0,0,0.12)';
+            });
+        }
+
+        function startCycle() {
+            if (timer) return;
+            timer = setInterval(() => {
+                idx = (idx + 1) % imgs.length;
+                applyOrder(idx);
+            }, 800);
+        }
+
+        function stopCycle() {
+            if (timer) { clearInterval(timer); timer = null; }
+            idx = 0;
+            applyOrder(idx);
+        }
+
+        // initial layout
+        applyOrder(0);
+
+        card.addEventListener('mouseenter', startCycle);
+        card.addEventListener('focusin', startCycle);
+        card.addEventListener('mouseleave', stopCycle);
+        card.addEventListener('focusout', stopCycle);
+    });
+});
+</script>
+
+    <script>
+    // Carousel behavior for product cards (section1): auto-cycle on hover, dots control
+    document.addEventListener('DOMContentLoaded', function() {
+        const carousels = document.querySelectorAll('.product-card .carousel');
+        carousels.forEach(car => {
+            const items = car.querySelectorAll('.carousel-item');
+            const dots = car.querySelectorAll('.carousel-dots .dot');
+            if (!items.length) return;
+
+            let idx = 0, timer = null;
+
+            function show(i) {
+                items.forEach((it, j) => it.classList.toggle('active', j === i));
+                dots.forEach((d, j) => d.classList.toggle('active', j === i));
+                idx = i;
+            }
+
+            function start() { if (timer) return; timer = setInterval(() => show((idx+1)%items.length), 1200); }
+            function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+            car.addEventListener('mouseenter', start);
+            car.addEventListener('mouseleave', stop);
+            car.addEventListener('focusin', start);
+            car.addEventListener('focusout', stop);
+
+            dots.forEach(d => d.addEventListener('click', () => show(Number(d.dataset.index))));
+            // ensure first visible
+            show(0);
+        });
+    });
+    </script>
+
+{% endblock %}

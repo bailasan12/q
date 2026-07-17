@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}لوحة الإدارة{% endblock %}
+
+{% block content %}
+<div class="admin-shell">
+  <div class="admin-topbar">
+    <div>
+      <h1>لوحة تحكم مالك المتجر</h1>
+      <p>تابع الطلبات وأضف منتجات جديدة بسهولة</p>
+    </div>
+    <a href="{{ url_for('admin_logout') }}" class="btn secondary">تسجيل الخروج</a>
+  </div>
+
+  <div class="admin-stats">
+    <div class="stat-card">
+      <h3>{{ product_count }}</h3>
+      <p>إجمالي المنتجات</p>
+    </div>
+    <div class="stat-card">
+      <h3>{{ order_count }}</h3>
+      <p>إجمالي الطلبات</p>
+    </div>
+  </div>
+
+  <div class="admin-actions">
+    <a href="{{ url_for('admin_orders') }}" class="btn buy">إدارة الطلبات</a>
+    <a href="{{ url_for('admin_products') }}" class="btn secondary">إضافة منتج جديد</a>
+  </div>
+
+  <div class="admin-panel">
+    <h2>آخر الطلبات</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>الرقم</th>
+            <th>العميل</th>
+            <th>الجوال</th>
+            <th>الإجمالي</th>
+            <th>الحالة</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in recent_orders %}
+          <tr>
+            <td>#{{ order.order_id }}</td>
+            <td>{{ order.customer_name }}</td>
+            <td>{{ order.customer_phone }}</td>
+            <td>{{ order.final_total }} ₪</td>
+            <td>{{ order.status }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
