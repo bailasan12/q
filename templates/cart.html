@@ -18,7 +18,7 @@
 
         <div class="flipbook single">
           <div class="page front">
-            <img src="{{ url_for('static', filename='images/' + item.image) }}" alt="{{ item.name }}">
+            <img src="{{ url_for('product_image', image_name=item.image) }}" alt="{{ item.name }}">
           </div>
         </div>
 

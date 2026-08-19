@@ -19,7 +19,7 @@
       <div class="checkout-item">
 
         <div class="checkout-thumb">
-          <img src="{{ url_for('static', filename='images/' + item.image) }}" 
+          <img src="{{ url_for('product_image', image_name=item.image) }}"
                alt="{{ item.name }}">
         </div>
 

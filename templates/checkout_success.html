@@ -44,7 +44,7 @@
         <h4>المنتجات داخل الطلب</h4>
         {% for item in cart_items %}
         <div class="order-item-card">
-          <img src="{{ url_for('static', filename='images/' + item.image) }}" alt="{{ item.name }}">
+          <img src="{{ url_for('product_image', image_name=item.image) }}" alt="{{ item.name }}">
           <div class="order-item-info">
             <h5>{{ item.name }}</h5>
             <p>الكمية: {{ item.quantity }}</p>

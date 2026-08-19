@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, request, url_for,flash
+from flask import Flask, render_template, session, redirect, request, url_for, flash, send_from_directory
 import os
 import uuid
 import sqlite3
@@ -8,13 +8,14 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "secret123")
-app.config["UPLOAD_FOLDER"] = os.path.join(os.path.dirname(__file__), 'static', 'uploads')
-app.config["DB_PATH"] = os.path.join(os.path.dirname(__file__), 'shop.db')
+DATA_DIR = os.environ.get("DATA_DIR", os.path.dirname(__file__))
+app.config["UPLOAD_FOLDER"] = os.path.join(DATA_DIR, 'uploads')
+app.config["DB_PATH"] = os.path.join(DATA_DIR, 'shop.db')
 app.config["ADMIN_USERNAME"] = os.environ.get("ADMIN_USERNAME", "admin")
 app.config["ADMIN_PASSWORD"] = os.environ.get("ADMIN_PASSWORD", "123456")
 
 UPLOAD_FOLDER = app.config["UPLOAD_FOLDER"]
-PRODUCT_IMAGE_FOLDER = os.path.join(os.path.dirname(__file__), 'static', 'images')
+PRODUCT_IMAGE_FOLDER = os.path.join(DATA_DIR, 'images')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(PRODUCT_IMAGE_FOLDER, exist_ok=True)
 
@@ -54,6 +55,23 @@ def init_db():
             colors TEXT,
             requires_attachment INTEGER DEFAULT 0,
             status TEXT DEFAULT 'active'
+        )
+    ''')
+
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS orders (
+            order_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customer_name TEXT NOT NULL,
+            customer_phone TEXT NOT NULL,
+            customer_address TEXT NOT NULL,
+            payment_method TEXT NOT NULL,
+            delivery_region TEXT NOT NULL,
+            order_notes TEXT,
+            total REAL NOT NULL,
+            shipping_fee REAL NOT NULL,
+            final_total REAL NOT NULL,
+            items_json TEXT NOT NULL,
+            status TEXT DEFAULT 'new'
         )
     ''')
 
@@ -262,6 +280,17 @@ ramadan_products = [
 @app.route('/')
 def home():
     return render_template('index.html')
+
+@app.route('/product-images/<path:image_name>')
+def product_image(image_name):
+    image_path = os.path.join(PRODUCT_IMAGE_FOLDER, image_name)
+    if os.path.isfile(image_path):
+        return send_from_directory(PRODUCT_IMAGE_FOLDER, image_name)
+    return send_from_directory(os.path.join(app.static_folder, 'images'), image_name)
+
+@app.route('/order-uploads/<path:filename>')
+def order_upload(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 @app.route('/section1')
 def section1():
@@ -1011,11 +1040,7 @@ def delete_product_image(product_id, image_name):
         images.remove(image_name)
 
         # حذف الملف من المجلد
-        image_path = os.path.join(
-            app.static_folder,
-            "images",
-            image_name
-        )
+        image_path = os.path.join(PRODUCT_IMAGE_FOLDER, image_name)
 
         if os.path.exists(image_path):
             os.remove(image_path)

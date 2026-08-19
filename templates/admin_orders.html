@@ -36,14 +36,14 @@
               {% for item in order['items'] %}
               <div class="product-card-mini">
 
-                <img src="{{ url_for('static', filename='images/' + item.image) }}"
+                <img src="{{ url_for('product_image', image_name=item.image) }}"
                      alt="{{ item.name }}"
                      class="product-thumb">
 
                 {% if item.get('attachment') %}
                 <p>الصورة المرفقة من العميل:</p>
 
-                <img src="{{ url_for('static', filename='uploads/' + item.get('attachment')) }}"
+                <img src="{{ url_for('order_upload', filename=item.get('attachment')) }}"
                      alt="صورة العميل"
                      class="product-thumb">
                 {% endif %}

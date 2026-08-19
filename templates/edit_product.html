@@ -64,7 +64,7 @@ checked
 
 {% for img in product_images %}
 <div>
-    <img src="{{ url_for('static', filename='images/' + img) }}" width="120">
+    <img src="{{ url_for('product_image', image_name=img) }}" width="120">
 
 <a href="{{ url_for('delete_product_image',
     product_id=product.product_id,

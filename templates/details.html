@@ -8,11 +8,11 @@
 	<div class="details-gallery">
 		{% if product.images %}
 		<div class="main-image">
-			<img id="main-product-image" src="{{ url_for('static', filename='images/' + product.images[0]) }}" alt="{{ product.name }}">
+			<img id="main-product-image" src="{{ url_for('product_image', image_name=product.images[0]) }}" alt="{{ product.name }}">
 		</div>
 		<div class="thumbs">
 			{% for img in product.images %}
-			<img class="thumb" src="{{ url_for('static', filename='images/' + img) }}" data-src="{{ url_for('static', filename='images/' + img) }}" alt="{{ product.name }}">
+			<img class="thumb" src="{{ url_for('product_image', image_name=img) }}" data-src="{{ url_for('product_image', image_name=img) }}" alt="{{ product.name }}">
 			{% endfor %}
 		</div>
 		{% endif %}
