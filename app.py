@@ -341,6 +341,11 @@ def section8():
     products = get_products_by_category('section8')
     return render_template("section8.html", products=products, favorites=favorites)
 
+@app.route('/section9')
+def section9():
+    favorites = session.get("favorites", [])
+    products = get_products_by_category('section9')
+    return render_template("section9.html", products=products, favorites=favorites)
 
 
 @app.route("/toggle_favorite/<int:product_id>")
